@@ -1,37 +1,34 @@
 import pygame
 import sys
-from Superbustykiller import Superhero
+from main_character import MainCharacter
+
 
 def start_game():
     pygame.init()
-    screen = pygame.display.set_mode((1000,800))
-    pygame.display.set_caption("SpaceX by Karachevtsev")
-    maincharacter = Superhero()
+    screen = pygame.display.set_mode((1000, 800))
+    pygame.display.set_caption("SpaxeX by Pushkova")
+    maincharacter = MainCharacter(screen)
 
     flag = True
     while flag:
+        '''обработка событий игрока'''
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_d:
-                    maincharacter.rect.centerx += 1
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_d:
+                if event.key == pygame.K_RIGHT:
                     maincharacter.move_right = True
-            elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_d:
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_RIGHT:
                     maincharacter.move_right = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a:
-                    maincharacter.rect.centerx -= 1
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a:
+                if event.key == pygame.K_LEFT:
                     maincharacter.move_left = True
-            elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_a:
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
                     maincharacter.move_left = False
 
         maincharacter.output()
         pygame.display.flip()
-start_game()
+        maincharacter.moving(screen)
+
