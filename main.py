@@ -1,5 +1,5 @@
 import pygame, controls
-from mrain_characte import MainCharacter
+from mr import MainCharacter
 from pygame.sprite import Group
 from stats import Stats
 
