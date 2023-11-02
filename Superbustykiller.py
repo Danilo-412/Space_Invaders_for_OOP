@@ -1,7 +1,7 @@
 import pygame
 
 
-class MainCharacter():
+class Superhero():
     def __init__(self, screen):
         '''основные характеристики'''
         self.screen = screen
@@ -27,4 +27,4 @@ class MainCharacter():
         screen.fill(0)
 
     def create_maincharacter_again(self):
-        self.center = self.screen_rect.centerx
+        self.center = self.screen_rect.centerx0
