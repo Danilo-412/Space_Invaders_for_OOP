@@ -6,4 +6,4 @@ class Stats():
 
 
     def reset_stats(self):
-        self.maincharacter_hp = 2
+        self.hero_hp = 2

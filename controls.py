@@ -1,36 +1,34 @@
 import pygame, sys
 from bullet import Bullet
 from enemy import Enemy
-from hero import Character
+from hero import Hero
 import time
 
 
-def events(screen, maincharacter, bullets):
+def events(screen, hero, bullets):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
-                maincharacter.move_right = True
+                hero.move_right = True
             if event.key == pygame.K_LEFT:
-                maincharacter.move_left = True
+                hero.move_left = True
             if event.key == pygame.K_SPACE:
-                new_bullet = Bullet(screen, maincharacter)
+                new_bullet = Bullet(screen, hero)
                 bullets.add(new_bullet)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
-                maincharacter.move_left = False
+                hero.move_left = False
             if event.key == pygame.K_RIGHT:
-                maincharacter.move_right = False
+                hero.move_right = False
 
 
-def update(screen, hero, enemy, bullets):
-    screen.fill(0)
-    for bullets in bullets.sprites():
-        print("Иди нахуй")
+def update(screen, hero, enemys, bullets):
+    for bullet in bullets.sprites():
+        bullet.draw_bullet()
     hero.output()
-    enemy.draw(screen)
-    pygame.display.flip()
+    enemys.draw(screen)
 
 
 def update_bullets(screen, enemys, bullets):
@@ -43,17 +41,19 @@ def update_bullets(screen, enemys, bullets):
     if len(enemys) == 0:
         bullets.empty()
         create_army(screen, enemys)
-def update_enemys(stats, screen, maincharacter, enemys, bullets):
+
+
+def update_enemys(stats, screen, hero, enemys, bullets):
     enemys.update()
-    if pygame.sprite.spritecollideany(maincharacter, enemys):
-        #print("!!!!!!!!!!!!")
-        maincharacter_kill(stats, screen, maincharacter, enemys, bullets)
-        enemys_check(stats, screen, maincharacter, enemys, bullets)
+    if pygame.sprite.spritecollideany(hero, enemys):
+        hero_kill(stats, screen, hero, enemys, bullets)
+        enemys_check(stats, screen, hero, enemys, bullets)
+
 
 def create_army(screen, enemys):
     enemy = Enemy(screen)
     enemy_width = enemy.rect.width
-    number_enemy_x = int((600 - 2 * enemy_width) / enemy_width)
+    number_enemy_x = int((1000 - 2 * enemy_width) / enemy_width)
     enemy_height = enemy.rect.height
     number_enemy_y = int((900 - 500 - 2 * enemy_height) / enemy_height)
     for row_num in range(number_enemy_y):
@@ -65,22 +65,23 @@ def create_army(screen, enemys):
             enemy.rect.y = enemy.rect.height + enemy.rect.height * row_num
             enemys.add(enemy)
 
-def maincharacter_kill(stats, screen, maincharacter, enemys, bullets):
-    if stats.maincharacter_hp > 0:
-        stats.maincharacter_hp -= 1
+
+def hero_kill(stats, screen, hero, enemys, bullets):
+    if stats.hero_hp > 0:
+        stats.hero_hp -= 1
         enemys.empty()
         bullets.empty()
         create_army(screen, enemys)
-        maincharacter.create_maincharacter_again()
+        hero.create_hero_again()
         time.sleep(1)
     else:
         stats.run_game = False
         sys.exit()
 
 
-def enemys_check(stats, screen, maincharacter, enemys, bullets):
+def enemys_check(stats, screen, hero, enemys, bullets):
     screen_rect = screen.get_rect()
     for enemy in enemys.sprites():
         if enemy.rect.bottom > screen_rect.bottom:
-            maincharacter_kill(stats, screen, maincharacter, enemys, bullets)
+            hero_kill(stats, screen, hero, enemys, bullets)
             break

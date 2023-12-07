@@ -1,34 +1,34 @@
-import pygame
-from hero import Character
-import control
-from enemy import Enemy
+import pygame, controls
+from hero import Hero
+from pygame.sprite import Group
 from stats import Stats
-
-
-#██╗░░░░░░█████╗░██╗░░░██╗███████╗
-#██║░░░░░██╔══██╗██║░░░██║██╔════╝
-#██║░░░░░██║░░██║╚██╗░██╔╝█████╗░░
-#██║░░░░░██║░░██║░╚████╔╝░██╔══╝░░
-#███████╗╚█████╔╝░░╚██╔╝░░███████╗
-#╚══════╝░╚════╝░░░░╚═╝░░░╚══════╝
 
 
 def start_game():
     pygame.init()
-    screen = pygame.display.set_mode((600, 700))
-    pygame.display.set_caption("Space Y")
-    character = Character(screen)
-    bullets = pygame.sprite.Group
+    screen = pygame.display.set_mode((1000, 600))
+    pygame.display.set_caption("SpaceXXX")
 
-    flag = True 
+    maincharacter = Hero(screen)
+    bullets = Group()
+    enemys = Group()
+
+    controls.create_army(screen, enemys)
+    bg = pygame.image.load("images/bg.png")
+
+    stats = Stats()
+    flag = True
     while flag:
-        control.events(screen, character, bullets)
-        character.output()
-        pygame.display.flip()
-        character.moving(screen)
+        screen.blit(bg, (0, 0))
+        controls.events(screen, maincharacter, bullets)
+        maincharacter.output()
+        maincharacter.moving(screen)
 
-        control.update(screen, character, Enemy, bullets)
-        control.update_bullets(screen, Enemy,bullets)
-        control.update_enemys(Stats, screen, character, Enemy, bullets)
+        controls.update(screen, maincharacter, enemys, bullets)
+        controls.update_bullets(screen, enemys, bullets)
+        controls.update_enemys(stats, screen, maincharacter, enemys, bullets)
+        pygame.display.flip()
+        screen.fill(0)
+
 
 start_game()
